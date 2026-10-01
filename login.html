@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>AURA GURU | Login</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -13,39 +12,23 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
     }
 
     body {
       min-height: 100vh;
+      font-family: Arial, sans-serif;
       background:
-        radial-gradient(circle at 50% 20%, rgba(212,175,55,.18), transparent 32%),
-        linear-gradient(135deg,#020202,#0c0c0c,#020202);
+        radial-gradient(circle at 50% 20%, #3a2a08 0%, #0b0b0b 35%, #000 75%);
       color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-    }
-
-    .orb {
-      position: fixed;
-      width: 430px;
-      height: 430px;
-      border-radius: 50%;
-      background: radial-gradient(circle,
-        rgba(255,255,255,.15),
-        rgba(212,175,55,.10),
-        transparent 70%);
-      filter: blur(5px);
+      padding: 20px;
     }
 
     .container {
       width: 100%;
-      max-width: 440px;
-      padding: 20px;
-      position: relative;
-      z-index: 2;
+      max-width: 460px;
     }
 
     .brand {
@@ -54,438 +37,492 @@
     }
 
     .brand h1 {
-      color: #d4af37;
+      font-size: 38px;
       letter-spacing: 5px;
-      font-size: 34px;
+      color: #d4af37;
     }
 
     .brand p {
-      color: #999;
-      font-size: 12px;
       margin-top: 8px;
-      letter-spacing: 1px;
+      color: #aaa;
+      font-size: 14px;
     }
 
     .card {
       background: rgba(15,15,15,.92);
-      border: 1px solid rgba(212,175,55,.25);
+      border: 1px solid rgba(212,175,55,.35);
       border-radius: 24px;
-      padding: 32px 28px;
+      padding: 32px;
       box-shadow: 0 25px 80px rgba(0,0,0,.65);
-      backdrop-filter: blur(20px);
     }
 
     .tabs {
       display: flex;
-      background: #080808;
-      padding: 4px;
-      border-radius: 12px;
+      gap: 8px;
       margin-bottom: 28px;
     }
 
     .tab {
-      width: 50%;
-      border: none;
+      flex: 1;
       padding: 12px;
-      border-radius: 9px;
-      background: transparent;
-      color: #888;
+      border: 1px solid #333;
+      border-radius: 12px;
+      background: #111;
+      color: #aaa;
       cursor: pointer;
-      font-weight: 600;
+      font-weight: bold;
     }
 
     .tab.active {
-      background: linear-gradient(135deg,#c9a227,#f2d66d);
-      color: #050505;
+      background: #d4af37;
+      color: #000;
+      border-color: #d4af37;
     }
 
     h2 {
-      font-size: 24px;
       margin-bottom: 8px;
+      font-size: 27px;
     }
 
-    .subtitle {
-      color: #888;
-      font-size: 13px;
-      line-height: 1.5;
+    .sub {
+      color: #999;
+      font-size: 14px;
       margin-bottom: 24px;
+      line-height: 1.5;
     }
 
     .field {
-      margin-bottom: 17px;
+      margin-bottom: 16px;
     }
 
     label {
       display: block;
-      color: #bbb;
-      font-size: 12px;
       margin-bottom: 7px;
+      color: #ccc;
+      font-size: 13px;
     }
 
     input {
       width: 100%;
-      padding: 14px;
-      border-radius: 11px;
-      border: 1px solid #292929;
-      background: #090909;
+      padding: 14px 15px;
+      border-radius: 12px;
+      border: 1px solid #333;
+      background: #080808;
       color: white;
       outline: none;
-      font-size: 14px;
+      font-size: 15px;
     }
 
     input:focus {
       border-color: #d4af37;
-      box-shadow: 0 0 0 3px rgba(212,175,55,.08);
     }
 
     .main-btn {
       width: 100%;
       padding: 15px;
+      margin-top: 8px;
       border: none;
-      border-radius: 12px;
-      background: linear-gradient(135deg,#c9a227,#f2d66d);
-      color: #050505;
-      font-weight: 700;
-      cursor: pointer;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #f1d675, #d4af37);
+      color: #000;
+      font-weight: 800;
       font-size: 15px;
+      cursor: pointer;
     }
 
     .main-btn:disabled {
       opacity: .6;
-      cursor: not-allowed;
+      cursor: wait;
     }
 
     .message {
-      margin-top: 16px;
-      text-align: center;
-      font-size: 13px;
+      display: none;
+      margin-top: 18px;
+      padding: 13px;
+      border-radius: 10px;
+      font-size: 14px;
       line-height: 1.5;
-      color: #ccc;
+    }
+
+    .success {
+      display: block;
+      background: rgba(20,130,70,.15);
+      border: 1px solid rgba(50,200,110,.4);
+      color: #8ff0b5;
+    }
+
+    .error {
+      display: block;
+      background: rgba(180,40,40,.15);
+      border: 1px solid rgba(255,80,80,.4);
+      color: #ff9b9b;
     }
 
     .back {
+      display: block;
       text-align: center;
       margin-top: 22px;
+      color: #aaa;
+      text-decoration: none;
+      font-size: 13px;
     }
 
-    .back a {
-      color: #999;
-      text-decoration: none;
-      font-size: 12px;
+    .back:hover {
+      color: #d4af37;
     }
 
     .hidden {
       display: none;
-    }
-
-    @media(max-width:500px) {
-      .card {
-        padding: 28px 20px;
-      }
-
-      .brand h1 {
-        font-size: 28px;
-      }
     }
   </style>
 </head>
 
 <body>
 
-<div class="orb"></div>
+  <div class="container">
 
-<div class="container">
+    <div class="brand">
+      <h1>AURA</h1>
+      <p>Your Personal AI Guru</p>
+    </div>
 
-  <div class="brand">
-    <h1>AURA GURU</h1>
-    <p>YOUR PERSONAL AI MENTOR</p>
+    <div class="card">
+
+      <div class="tabs">
+        <button id="loginTab" class="tab active" onclick="showLogin()">
+          LOGIN
+        </button>
+
+        <button id="signupTab" class="tab" onclick="showSignup()">
+          CREATE ACCOUNT
+        </button>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="loginForm">
+
+        <h2>Welcome Back</h2>
+        <p class="sub">
+          Continue your journey with AURA GURU.
+        </p>
+
+        <div class="field">
+          <label>Email</label>
+          <input id="loginEmail" type="email" placeholder="Enter your email">
+        </div>
+
+        <div class="field">
+          <label>Password</label>
+          <input id="loginPassword" type="password" placeholder="Enter your password">
+        </div>
+
+        <button id="loginButton" class="main-btn" onclick="loginUser()">
+          LOGIN TO AURA
+        </button>
+
+      </div>
+
+      <!-- SIGNUP -->
+      <div id="signupForm" class="hidden">
+
+        <h2>Create Your AURA</h2>
+        <p class="sub">
+          Start building your personal AI-guided growth journey.
+        </p>
+
+        <div class="field">
+          <label>Full Name</label>
+          <input id="signupName" type="text" placeholder="Your name">
+        </div>
+
+        <div class="field">
+          <label>Email</label>
+          <input id="signupEmail" type="email" placeholder="Your email">
+        </div>
+
+        <div class="field">
+          <label>Password</label>
+          <input id="signupPassword" type="password" placeholder="Minimum 6 characters">
+        </div>
+
+        <button id="signupButton" class="main-btn" onclick="createAccount()">
+          CREATE MY AURA
+        </button>
+
+      </div>
+
+      <div id="message" class="message"></div>
+
+      <a href="index.html" class="back">
+        ← Back to AURA GURU
+      </a>
+
+    </div>
   </div>
 
-  <div class="card">
 
-    <div class="tabs">
-      <button class="tab active" id="loginTab" onclick="showLogin()">
-        Login
-      </button>
+  <script>
 
-      <button class="tab" id="signupTab" onclick="showSignup()">
-        Create Account
-      </button>
-    </div>
+    /* =====================================================
+       SUPABASE CONFIGURATION
+       ===================================================== */
 
-    <!-- LOGIN -->
+    const SUPABASE_URL = "https://siatoghkuuummtrhfxlx.supabase.co/rest/v1/";
 
-    <div id="loginForm">
-
-      <h2>Welcome Back</h2>
-
-      <p class="subtitle">
-        Continue your journey with AURA GURU.
-      </p>
-
-      <div class="field">
-        <label>Email Address</label>
-        <input id="loginEmail" type="email" placeholder="Enter your email">
-      </div>
-
-      <div class="field">
-        <label>Password</label>
-        <input id="loginPassword" type="password" placeholder="Enter your password">
-      </div>
-
-      <button class="main-btn" id="loginBtn" onclick="loginUser()">
-        Enter AURA GURU
-      </button>
-
-      <div id="loginMessage" class="message"></div>
-
-    </div>
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_2gqa3zniT2SIzd8uaBs3Rw_1_1BvM-F";
 
 
-    <!-- SIGNUP -->
+    /* =====================================================
+       SUPABASE CLIENT
+       ===================================================== */
 
-    <div id="signupForm" class="hidden">
-
-      <h2>Begin Your Journey</h2>
-
-      <p class="subtitle">
-        Create your AURA GURU account and start building your next version.
-      </p>
-
-      <div class="field">
-        <label>Full Name</label>
-        <input id="signupName" type="text" placeholder="Enter your name">
-      </div>
-
-      <div class="field">
-        <label>Email Address</label>
-        <input id="signupEmail" type="email" placeholder="Enter your email">
-      </div>
-
-      <div class="field">
-        <label>Create Password</label>
-        <input id="signupPassword" type="password" placeholder="Create a password">
-      </div>
-
-      <button class="main-btn" id="signupBtn" onclick="createAccount()">
-        Create My AURA
-      </button>
-
-      <div id="signupMessage" class="message"></div>
-
-    </div>
-
-    <div class="back">
-      <a href="index.html">← Back to AURA GURU</a>
-    </div>
-
-  </div>
-
-</div>
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
 
 
-<script>
+    /* =====================================================
+       MESSAGE
+       ===================================================== */
 
-  /* =====================================================
-     SUPABASE CONNECTION
-     ===================================================== */
+    function showMessage(text, type) {
 
-  const SUPABASE_URL = "https://siatoghkuuummtrhfxlx.supabase.co/rest/v1/";
+      const box = document.getElementById("message");
 
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_2gqa3zniT2SIzd8uaBs3Rw_1_1BvM-F";
+      box.textContent = text;
 
-  const supabaseClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
-
-
-  /* =====================================================
-     LOGIN / SIGNUP TABS
-     ===================================================== */
-
-  function showLogin() {
-
-    document.getElementById("loginForm").classList.remove("hidden");
-    document.getElementById("signupForm").classList.add("hidden");
-
-    document.getElementById("loginTab").classList.add("active");
-    document.getElementById("signupTab").classList.remove("active");
-  }
-
-
-  function showSignup() {
-
-    document.getElementById("loginForm").classList.add("hidden");
-    document.getElementById("signupForm").classList.remove("hidden");
-
-    document.getElementById("loginTab").classList.remove("active");
-    document.getElementById("signupTab").classList.add("active");
-  }
-
-
-  /* =====================================================
-     CREATE ACCOUNT
-     ===================================================== */
-
-  async function createAccount() {
-
-    const name =
-      document.getElementById("signupName").value.trim();
-
-    const email =
-      document.getElementById("signupEmail").value.trim();
-
-    const password =
-      document.getElementById("signupPassword").value;
-
-    const message =
-      document.getElementById("signupMessage");
-
-    const button =
-      document.getElementById("signupBtn");
-
-
-    if (!name || !email || !password) {
-
-      message.textContent =
-        "Please fill all fields.";
-
-      return;
+      box.className = "message " + type;
     }
 
 
-    if (password.length < 6) {
+    /* =====================================================
+       TABS
+       ===================================================== */
 
-      message.textContent =
-        "Password must be at least 6 characters.";
+    function showLogin() {
 
-      return;
+      document.getElementById("loginForm").classList.remove("hidden");
+
+      document.getElementById("signupForm").classList.add("hidden");
+
+      document.getElementById("loginTab").classList.add("active");
+
+      document.getElementById("signupTab").classList.remove("active");
+
+      document.getElementById("message").className = "message";
     }
 
 
-    button.disabled = true;
+    function showSignup() {
 
-    message.textContent =
-      "Creating your AURA GURU account...";
+      document.getElementById("loginForm").classList.add("hidden");
+
+      document.getElementById("signupForm").classList.remove("hidden");
+
+      document.getElementById("loginTab").classList.remove("active");
+
+      document.getElementById("signupTab").classList.add("active");
+
+      document.getElementById("message").className = "message";
+    }
 
 
-    try {
+    /* =====================================================
+       CREATE ACCOUNT
+       ===================================================== */
 
-      const { data, error } =
-        await supabaseClient.auth.signUp({
+    async function createAccount() {
 
-          email: email,
+      const name =
+        document.getElementById("signupName").value.trim();
 
-          password: password,
+      const email =
+        document.getElementById("signupEmail").value.trim();
 
-          options: {
-            data: {
-              full_name: name
+      const password =
+        document.getElementById("signupPassword").value;
+
+      const button =
+        document.getElementById("signupButton");
+
+
+      if (!name || !email || !password) {
+
+        showMessage(
+          "Please fill all the fields.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      if (password.length < 6) {
+
+        showMessage(
+          "Password must contain at least 6 characters.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      button.disabled = true;
+
+      button.textContent = "CREATING...";
+
+
+      try {
+
+        const { data, error } =
+          await supabaseClient.auth.signUp({
+
+            email: email,
+
+            password: password,
+
+            options: {
+              data: {
+                full_name: name
+              }
             }
-          }
 
-        });
+          });
 
 
-      if (error) {
-        throw error;
+        if (error) {
+
+          showMessage(
+            error.message,
+            "error"
+          );
+
+          button.disabled = false;
+
+          button.textContent = "CREATE MY AURA";
+
+          return;
+        }
+
+
+        if (data.user) {
+
+          showMessage(
+            "Account created successfully! Check your email to verify your account.",
+            "success"
+          );
+
+        }
+
+      } catch (err) {
+
+        showMessage(
+          "Something went wrong. Please try again.",
+          "error"
+        );
+
       }
 
-
-      if (data.user) {
-
-        message.textContent =
-          "Account created successfully. Please check your email to confirm your account.";
-
-      }
-
-    } catch (error) {
-
-      message.textContent =
-        error.message;
-
-    } finally {
 
       button.disabled = false;
 
-    }
-
-  }
-
-
-  /* =====================================================
-     LOGIN
-     ===================================================== */
-
-  async function loginUser() {
-
-    const email =
-      document.getElementById("loginEmail").value.trim();
-
-    const password =
-      document.getElementById("loginPassword").value;
-
-    const message =
-      document.getElementById("loginMessage");
-
-    const button =
-      document.getElementById("loginBtn");
-
-
-    if (!email || !password) {
-
-      message.textContent =
-        "Please enter your email and password.";
-
-      return;
+      button.textContent = "CREATE MY AURA";
     }
 
 
-    button.disabled = true;
+    /* =====================================================
+       LOGIN
+       ===================================================== */
 
-    message.textContent =
-      "Signing you in...";
+    async function loginUser() {
 
+      const email =
+        document.getElementById("loginEmail").value.trim();
 
-    try {
+      const password =
+        document.getElementById("loginPassword").value;
 
-      const { data, error } =
-        await supabaseClient.auth.signInWithPassword({
-
-          email: email,
-
-          password: password
-
-        });
+      const button =
+        document.getElementById("loginButton");
 
 
-      if (error) {
-        throw error;
+      if (!email || !password) {
+
+        showMessage(
+          "Please enter email and password.",
+          "error"
+        );
+
+        return;
       }
 
 
-      message.textContent =
-        "Login successful. Welcome to AURA GURU!";
+      button.disabled = true;
 
-      /*
-        Dashboard will be connected in the next step.
-      */
+      button.textContent = "LOGGING IN...";
 
-    } catch (error) {
 
-      message.textContent =
-        error.message;
+      try {
 
-    } finally {
+        const { data, error } =
+          await supabaseClient.auth.signInWithPassword({
+
+            email: email,
+
+            password: password
+
+          });
+
+
+        if (error) {
+
+          showMessage(
+            error.message,
+            "error"
+          );
+
+          button.disabled = false;
+
+          button.textContent = "LOGIN TO AURA";
+
+          return;
+        }
+
+
+        if (data.session) {
+
+          showMessage(
+            "Login successful! Dashboard connection is next.",
+            "success"
+          );
+
+          /*
+            NEXT STEP:
+            We will redirect this to dashboard.html
+            after the dashboard is ready.
+          */
+
+        }
+
+      } catch (err) {
+
+        showMessage(
+          "Something went wrong. Please try again.",
+          "error"
+        );
+
+      }
+
 
       button.disabled = false;
 
+      button.textContent = "LOGIN TO AURA";
     }
 
-  }
-
-</script>
+  </script>
 
 </body>
 </html>
