@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>AURA GURU — Personal AI Mentor</title>
+
+  <meta name="description"
+    content="AURA GURU is your personal AI mentor for clarity, goals, action and growth.">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black: #050505;
+      --black2: #0b0b0b;
+      --gold: #d4af37;
+      --gold-light: #f5d76e;
+      --white: #ffffff;
+      --muted: #a7a7a7;
+      --glass: rgba(255,255,255,0.055);
+      --border: rgba(212,175,55,0.22);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at 50% 15%, rgba(212,175,55,0.10), transparent 28%),
+        radial-gradient(circle at 15% 60%, rgba(212,175,55,0.05), transparent 25%),
+        #050505;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    /* BACKGROUND */
+
+    .background {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .glow {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: .13;
+      background: #d4af37;
+      animation: moveGlow 12s ease-in-out infinite alternate;
+    }
+
+    .glow.one {
+      top: -180px;
+      left: -120px;
+    }
+
+    .glow.two {
+      right: -180px;
+      bottom: -180px;
+      animation-delay: 3s;
+    }
+
+    @keyframes moveGlow {
+      from {
+        transform: translate(0,0);
+      }
+      to {
+        transform: translate(80px,50px);
+      }
+    }
+
+    /* NAVBAR */
+
+    nav {
+      width: 100%;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 7%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      background: rgba(5,5,5,.65);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+
+    .logo {
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .logo span {
+      color: var(--gold);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 34px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: #cfcfcf;
+      text-decoration: none;
+      font-size: 14px;
+      transition: .3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold-light);
+    }
+
+    .nav-button {
+      text-decoration: none;
+      color: #050505;
+      background: linear-gradient(135deg, #f5d76e, #c49a27);
+      padding: 12px 21px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 13px;
+      box-shadow: 0 0 25px rgba(212,175,55,.18);
+    }
+
+    /* HERO */
+
+    .hero {
+      min-height: 100vh;
+      padding: 150px 7% 90px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 50px;
+      max-width: 1500px;
+      margin: auto;
+    }
+
+    .hero-content {
+      max-width: 650px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 15px;
+      border-radius: 50px;
+      border: 1px solid var(--border);
+      background: rgba(212,175,55,.06);
+      color: var(--gold-light);
+      font-size: 12px;
+      letter-spacing: 1px;
+      margin-bottom: 25px;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 12px var(--gold);
+    }
+
+    h1 {
+      font-size: clamp(48px, 6vw, 82px);
+      line-height: .98;
+      letter-spacing: -4px;
+      margin-bottom: 28px;
+    }
+
+    h1 .gold {
+      background: linear-gradient(135deg, #fff, #f5d76e, #c49a27);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-description {
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.7;
+      max-width: 580px;
+      margin-bottom: 35px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+      padding: 15px 25px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      transition: .3s;
+    }
+
+    .primary-btn {
+      color: #050505;
+      background: linear-gradient(135deg, #f5d76e, #c49a27);
+      box-shadow: 0 10px 35px rgba(212,175,55,.18);
+    }
+
+    .secondary-btn {
+      color: white;
+      border: 1px solid rgba(255,255,255,.15);
+      background: rgba(255,255,255,.04);
+    }
+
+    .primary-btn:hover,
+    .secondary-btn:hover {
+      transform: translateY(-3px);
+    }
+
+    /* AURA ORB */
+
+    .orb-area {
+      height: 600px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      perspective: 1000px;
+      position: relative;
+    }
+
+    .orb-ring {
+      position: absolute;
+      width: 390px;
+      height: 390px;
+      border: 1px solid rgba(212,175,55,.25);
+      border-radius: 50%;
+      transform: rotateX(65deg) rotateZ(20deg);
+      animation: ringRotate 14s linear infinite;
+    }
+
+    .orb-ring.two {
+      width: 470px;
+      height: 470px;
+      transform: rotateY(65deg) rotateZ(-20deg);
+      border-color: rgba(255,255,255,.10);
+      animation-duration: 19s;
+      animation-direction: reverse;
+    }
+
+    .orb-ring.three {
+      width: 320px;
+      height: 520px;
+      transform: rotateX(70deg) rotateY(25deg);
+      border-color: rgba(212,175,55,.12);
+      animation-duration: 24s;
+    }
+
+    @keyframes ringRotate {
+      to {
+        transform: rotateX(65deg) rotateZ(380deg);
+      }
+    }
+
+    .orb {
+      width: 270px;
+      height: 270px;
+      border-radius: 50%;
+      position: relative;
+      background:
+        radial-gradient(circle at 35% 30%, #fff8cf 0%, #f5d76e 8%, #d4af37 25%, #765b12 50%, #080808 72%);
+      box-shadow:
+        0 0 40px rgba(212,175,55,.45),
+        0 0 100px rgba(212,175,55,.20),
+        inset -35px -35px 60px rgba(0,0,0,.65),
+        inset 20px 20px 30px rgba(255,255,255,.25);
+      animation: orbFloat 5s ease-in-out infinite;
+    }
+
+    .orb::before {
+      content: "";
+      position: absolute;
+      inset: 22px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.35);
+      box-shadow: inset 0 0 30px rgba(255,255,255,.12);
+    }
+
+    .orb::after {
+      content: "A";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 100px;
+      font-weight: 800;
+      color: rgba(255,255,255,.88);
+      text-shadow: 0 0 30px rgba(212,175,55,.8);
+    }
+
+    @keyframes orbFloat {
+      0%,100% {
+        transform: translateY(0) rotateY(0deg);
+      }
+      50% {
+        transform: translateY(-18px) rotateY(8deg);
+      }
+    }
+
+    .orb-label {
+      position: absolute;
+      bottom: 30px;
+      padding: 12px 20px;
+      border: 1px solid rgba(212,175,55,.25);
+      background: rgba(10,10,10,.65);
+      backdrop-filter: blur(15px);
+      border-radius: 30px;
+      color: #e8d48a;
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    /* SECTION */
+
+    section {
+      padding: 110px 7%;
+      max-width: 1400px;
+      margin: auto;
+    }
+
+    .section-heading {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 55px;
+    }
+
+    .section-heading .small {
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 3px;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(35px, 5vw, 55px);
+      margin-bottom: 18px;
+      letter-spacing: -2px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* CARDS */
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      min-height: 260px;
+      padding: 32px;
+      border-radius: 22px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.07), rgba(255,255,255,.025));
+      border: 1px solid rgba(255,255,255,.09);
+      box-shadow: 0 25px 70px rgba(0,0,0,.35);
+      transition: .4s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(212,175,55,.35);
+    }
+
+    .card-number {
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 2px;
+      margin-bottom: 45px;
+    }
+
+    .card h3 {
+      font-size: 23px;
+      margin-bottom: 12px;
+    }
+
+    .card p {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    /* JOURNEY */
+
+    .journey {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+
+    .journey-item {
+      text-align: center;
+      padding: 28px 15px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.035);
+    }
+
+    .journey-item strong {
+      display: block;
+      color: var(--gold-light);
+      margin-bottom: 10px;
+      font-size: 15px;
+    }
+
+    .journey-item span {
+      color: #999;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    /* CTA */
+
+    .cta {
+      margin: 50px 7% 100px;
+      max-width: 1250px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 75px 40px;
+      text-align: center;
+      border-radius: 30px;
+      border: 1px solid rgba(212,175,55,.22);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(212,175,55,.15), transparent 45%),
+        rgba(255,255,255,.035);
+      overflow: hidden;
+    }
+
+    .cta h2 {
+      font-size: clamp(36px,5vw,58px);
+      letter-spacing: -2px;
+      margin-bottom: 18px;
+    }
+
+    .cta p {
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto 30px;
+      line-height: 1.7;
+    }
+
+    /* FOOTER */
+
+    footer {
+      border-top: 1px solid rgba(255,255,255,.07);
+      padding: 35px 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #777;
+      font-size: 12px;
+    }
+
+    footer strong {
+      color: white;
+      letter-spacing: 1px;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 900px) {
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 130px;
+        text-align: center;
+      }
+
+      .hero-content {
+        margin: auto;
+      }
+
+      .hero-description {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-buttons {
+        justify-content: center;
+      }
+
+      .orb-area {
+        height: 470px;
+      }
+
+      .orb {
+        width: 210px;
+        height: 210px;
+      }
+
+      .orb::after {
+        font-size: 75px;
+      }
+
+      .orb-ring {
+        width: 300px;
+        height: 300px;
+      }
+
+      .orb-ring.two {
+        width: 360px;
+        height: 360px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .journey {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 500px) {
+
+      nav {
+        padding: 0 5%;
+      }
+
+      .logo {
+        font-size: 17px;
+      }
+
+      .nav-button {
+        padding: 10px 14px;
+      }
+
+      .hero {
+        padding-left: 5%;
+        padding-right: 5%;
+      }
+
+      h1 {
+        letter-spacing: -2px;
+      }
+
+      section {
+        padding-left: 5%;
+        padding-right: 5%;
+      }
+
+      .cta {
+        margin-left: 5%;
+        margin-right: 5%;
+        padding: 55px 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="background">
+    <div class="glow one"></div>
+    <div class="glow two"></div>
+  </div>
+
+  <!-- NAVIGATION -->
+
+  <nav>
+    <div class="logo">
+      AURA <span>GURU</span>
+    </div>
+
+    <div class="nav-links">
+      <a href="#how">How It Works</a>
+      <a href="#journey">Your Journey</a>
+      <a href="#about">About</a>
+    </div>
+
+    <a href="#start" class="nav-button">
+      Enter AURA
+    </a>
+  </nav>
+
+  <!-- HERO -->
+
+  <main>
+
+    <section class="hero" id="start">
+
+      <div class="hero-content">
+
+        <div class="badge">
+          <span class="badge-dot"></span>
+          PERSONAL AI MENTOR
+        </div>
+
+        <h1>
+          Your Life.<br>
+          Your Goals.<br>
+          <span class="gold">Your AURA.</span>
+        </h1>
+
+        <p class="hero-description">
+          Meet AURA GURU — a personal AI mentor designed to help you
+          find clarity, define your goals, take action and become
+          stronger every day.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="#how" class="primary-btn">
+            Begin Your Journey →
+          </a>
+
+          <a href="#journey" class="secondary-btn">
+            Explore AURA
+          </a>
+        </div>
+
+      </div>
+
+      <div class="orb-area">
+
+        <div class="orb-ring"></div>
+        <div class="orb-ring two"></div>
+        <div class="orb-ring three"></div>
+
+        <div class="orb"></div>
+
+        <div class="orb-label">
+          AWARENESS • ACTION • GROWTH
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- HOW IT WORKS -->
+
+    <section id="how">
+
+      <div class="section-heading">
+
+        <div class="small">
+          THE AURA METHOD
+        </div>
+
+        <h2>
+          Don't just think.<br>
+          Transform.
+        </h2>
+
+        <p>
+          AURA GURU turns your problems and ambitions into
+          practical next steps you can actually take.
+        </p>
+
+      </div>
+
+      <div class="cards">
+
+        <div class="card">
+          <div class="card-number">01 — CLARITY</div>
+          <h3>Understand Yourself</h3>
+          <p>
+            Bring your situation, challenge or ambition.
+            AURA helps you understand what is actually
+            holding you back.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-number">02 — DIRECTION</div>
+          <h3>Define Your Goal</h3>
+          <p>
+            Turn confusion into a clear destination with
+            practical priorities and a structured path forward.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-number">03 — ACTION</div>
+          <h3>Take The Next Step</h3>
+          <p>
+            Get actionable daily guidance designed around
+            your goals, situation and progress.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- JOURNEY -->
+
+    <section id="journey">
+
+      <div class="section-heading">
+
+        <div class="small">
+          YOUR TRANSFORMATION
+        </div>
+
+        <h2>
+          From Problem<br>
+          To Progress.
+        </h2>
+
+        <p>
+          A simple continuous loop that helps you move
+          from where you are to where you want to be.
+        </p>
+
+      </div>
+
+      <div class="journey">
+
+        <div class="journey-item">
+          <strong>01</strong>
+          <span>Problem & Reality</span>
+        </div>
+
+        <div class="journey-item">
+          <strong>02</strong>
+          <span>Diagnosis & Clarity</span>
+        </div>
+
+        <div class="journey-item">
+          <strong>03</strong>
+          <span>Goal & Strategy</span>
+        </div>
+
+        <div class="journey-item">
+          <strong>04</strong>
+          <span>Daily Action</span>
+        </div>
+
+        <div class="journey-item">
+          <strong>05</strong>
+          <span>Review & Growth</span>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ABOUT -->
+
+    <section id="about">
+
+      <div class="section-heading">
+
+        <div class="small">
+          THE IDEA
+        </div>
+
+        <h2>
+          Ancient Wisdom.<br>
+          Modern Intelligence.
+        </h2>
+
+        <p>
+          AURA GURU combines the guidance mindset of a
+          traditional guru–shishya relationship with modern
+          artificial intelligence — built to help you think,
+          act and grow.
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- CTA -->
+
+    <div class="cta">
+
+      <h2>
+        Your next chapter<br>
+        starts with one step.
+      </h2>
+
+      <p>
+        Tell AURA GURU where you are.
+        Discover where you want to go.
+        Then start moving.
+      </p>
+
+      <a href="#start" class="primary-btn">
+        Start With AURA →
+      </a>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    <div>
+      © 2026 <strong>AURA GURU</strong>
+    </div>
+
+    <div>
+      Personal AI Mentor & Growth Platform
+    </div>
+
+  </footer>
+
+</body>
+</html>
