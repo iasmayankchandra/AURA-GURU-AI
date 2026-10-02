@@ -1123,7 +1123,72 @@ async function loadGoal(){
 
   goalText.textContent = text;
 }
-loadUser();
+function getLocalDate() {
+  const d = new Date();
+
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+async function addAction() {
+
+  const actionText = prompt("What action do you want to complete today?");
+
+  if (!actionText || !actionText.trim()) {
+    return;
+  }
+
+  const {
+    data: { user },
+    error: userError
+  } = await supabaseClient.auth.getUser();
+
+  if (userError || !user) {
+    alert("Please login first.");
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("daily_actions")
+    .insert([{
+      user_id: user.id,
+      action: actionText.trim(),
+      action_date: getLocalDate(),
+      completed: false
+    }]);
+
+  if (error) {
+    console.error(error);
+    alert("Could not add action.");
+    return;
+  }
+
+  loadActions();
+}
+
+
+async function completeAction(actionId) {
+
+  const { error } = await supabaseClient
+    .from("daily_actions")
+    .update({
+      completed: true,
+      completed_at: new Date().toISOString()
+    })
+    .eq("id", actionId);
+
+  if (error) {
+    console.error(error);
+    alert("Could not complete action.");
+    return;
+  }
+
+  loadActions();
+}
+  loadUser();
   loadGoal();
 loadactions();
 </script>
