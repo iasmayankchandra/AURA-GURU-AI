@@ -669,29 +669,49 @@ body::before{
     ⚡
   </div>
 
-  <h3>
-    Today's Action
-  </h3>
+  <h3>Today's Actions</h3>
 
-  <p id="todayAction">
-    Loading today's action...
-  </p>
+  <div id="actionsList" style="margin-top:18px;">
+
+    <div class="action-item">
+      <span>
+        Focus on one meaningful action today.
+      </span>
+
+      <button
+        onclick="completeAction(this)"
+        style="
+          margin-top:12px;
+          padding:9px 15px;
+          border:none;
+          border-radius:9px;
+          background:#d4af37;
+          color:#080808;
+          font-weight:700;
+          cursor:pointer;
+        "
+      >
+        Complete ✓
+      </button>
+
+    </div>
+
+  </div>
 
   <button
-    id="actionButton"
-    onclick="completeAction()"
+    onclick="addAction()"
     style="
-      margin-top:15px;
-      padding:10px 18px;
-      border:none;
+      margin-top:18px;
+      padding:10px 16px;
+      border:1px solid #d4af37;
       border-radius:10px;
-      background:#d4af37;
-      color:#080808;
+      background:transparent;
+      color:#d4af37;
       font-weight:700;
       cursor:pointer;
     "
   >
-    Mark Complete ✓
+    + Add Action
   </button>
 
 </div>
