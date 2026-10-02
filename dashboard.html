@@ -1292,7 +1292,12 @@ async function completeAction(actionId) {
     error: userError
   } = await supabaseClient.auth.getUser();
 
-  if (userError || !user) return;
+  if (userError || !user) {
+  console.error("PROGRESS USER ERROR:", userError);
+  document.getElementById("progressText").textContent =
+    "Progress could not load.";
+  return;
+}
 
   const today = getLocalDate();
 
@@ -1303,9 +1308,11 @@ async function completeAction(actionId) {
     .eq("action_date", today);
 
   if (error) {
-    console.error("Error loading progress:", error);
-    return;
-  }
+  console.error("PROGRESS DATABASE ERROR:", error);
+  document.getElementById("progressText").textContent =
+    "Progress could not load.";
+  return;
+}
 
   const total = data ? data.length : 0;
 
