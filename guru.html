@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AURA GURU | Your AI Mentor</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+:root{
+  --gold:#d4af37;
+  --gold-light:#f4dc7a;
+  --black:#030303;
+  --card:#0b0b0b;
+  --text:#f5f5f5;
+  --muted:#8a8a8a;
+  --border:rgba(212,175,55,.20);
+}
+
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 15% 5%,rgba(212,175,55,.13),transparent 28%),
+    radial-gradient(circle at 90% 20%,rgba(212,175,55,.08),transparent 25%),
+    #030303;
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+.container{
+  width:min(1050px,94%);
+  margin:auto;
+  padding:24px 0 40px;
+}
+
+/* HEADER */
+
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:24px;
+}
+
+.logo{
+  color:var(--gold);
+  font-size:24px;
+  font-weight:900;
+  letter-spacing:6px;
+}
+
+.logo span{
+  display:block;
+  color:#555;
+  font-size:8px;
+  letter-spacing:3px;
+  margin-top:5px;
+}
+
+.back{
+  text-decoration:none;
+  color:#888;
+  border:1px solid #292929;
+  padding:10px 15px;
+  border-radius:10px;
+  font-size:12px;
+}
+
+.back:hover{
+  color:var(--gold);
+  border-color:var(--gold);
+}
+
+/* HERO */
+
+.hero{
+  text-align:center;
+  padding:35px 20px 25px;
+}
+
+.guru-symbol{
+  width:70px;
+  height:70px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  color:var(--gold-light);
+  font-size:30px;
+  border:1px solid rgba(212,175,55,.35);
+  background:
+    radial-gradient(circle,#33280d,#0b0b0b);
+  box-shadow:
+    0 0 60px rgba(212,175,55,.12);
+}
+
+.hero h1{
+  margin-top:20px;
+  font-size:clamp(30px,5vw,48px);
+}
+
+.gold{
+  color:var(--gold);
+}
+
+.hero p{
+  max-width:650px;
+  margin:12px auto 0;
+  color:#777;
+  font-size:14px;
+  line-height:1.7;
+}
+
+/* CHAT */
+
+.chat-card{
+  min-height:560px;
+  display:flex;
+  flex-direction:column;
+  border:1px solid var(--border);
+  border-radius:26px;
+  overflow:hidden;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.045),
+      rgba(255,255,255,.012)
+    );
+  box-shadow:
+    0 30px 100px rgba(0,0,0,.55);
+}
+
+.chat-header{
+  padding:18px 22px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.status{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#d4af37;
+  box-shadow:0 0 12px rgba(212,175,55,.7);
+}
+
+.chat-header strong{
+  font-size:13px;
+}
+
+.chat-header small{
+  display:block;
+  color:#666;
+  font-size:10px;
+  margin-top:3px;
+}
+
+.messages{
+  flex:1;
+  padding:25px;
+  overflow-y:auto;
+}
+
+.message{
+  max-width:78%;
+  padding:15px 17px;
+  border-radius:17px;
+  margin-bottom:16px;
+  font-size:14px;
+  line-height:1.65;
+}
+
+.guru-message{
+  background:#0d0d0d;
+  border:1px solid rgba(255,255,255,.07);
+  color:#d8d8d8;
+  border-bottom-left-radius:5px;
+}
+
+.user-message{
+  margin-left:auto;
+  background:linear-gradient(
+    135deg,
+    #d4af37,
+    #a77d19
+  );
+  color:#050505;
+  border-bottom-right-radius:5px;
+  font-weight:600;
+}
+
+/* SUGGESTIONS */
+
+.suggestions{
+  display:flex;
+  gap:8px;
+  padding:0 20px 15px;
+  overflow-x:auto;
+}
+
+.suggestion{
+  white-space:nowrap;
+  padding:9px 13px;
+  border-radius:20px;
+  border:1px solid #292929;
+  background:#090909;
+  color:#999;
+  cursor:pointer;
+  font-size:11px;
+}
+
+.suggestion:hover{
+  color:var(--gold);
+  border-color:rgba(212,175,55,.4);
+}
+
+/* INPUT */
+
+.input-area{
+  padding:17px;
+  border-top:1px solid rgba(255,255,255,.07);
+  display:flex;
+  gap:10px;
+  background:#070707;
+}
+
+.input-area textarea{
+  flex:1;
+  min-height:52px;
+  max-height:130px;
+  resize:none;
+  padding:15px;
+  border-radius:14px;
+  border:1px solid #292929;
+  outline:none;
+  background:#030303;
+  color:white;
+  font-family:inherit;
+  font-size:14px;
+}
+
+.input-area textarea:focus{
+  border-color:rgba(212,175,55,.55);
+}
+
+.send{
+  width:55px;
+  border:0;
+  border-radius:14px;
+  background:linear-gradient(
+    135deg,
+    var(--gold-light),
+    var(--gold)
+  );
+  color:#050505;
+  font-size:20px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.send:disabled{
+  opacity:.5;
+  cursor:wait;
+}
+
+/* MOBILE */
+
+@media(max-width:650px){
+
+  .container{
+    width:94%;
+  }
+
+  .header{
+    margin-bottom:10px;
+  }
+
+  .logo{
+    font-size:20px;
+  }
+
+  .hero{
+    padding-top:25px;
+  }
+
+  .chat-card{
+    min-height:600px;
+    border-radius:20px;
+  }
+
+  .message{
+    max-width:88%;
+  }
+
+  .input-area{
+    padding:12px;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+
+  <header class="header">
+
+    <div class="logo">
+      AURA
+      <span>PERSONAL AI GURU</span>
+    </div>
+
+    <a href="dashboard.html" class="back">
+      ← Dashboard
+    </a>
+
+  </header>
+
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <div class="guru-symbol">
+      ✦
+    </div>
+
+    <h1>
+      Ask Your <span class="gold">Guru.</span>
+    </h1>
+
+    <p>
+      Bring your confusion, goals, decisions or challenges.
+      AURA helps you find clarity and turn it into your next action.
+    </p>
+
+  </section>
+
+
+  <!-- CHAT -->
+
+  <section class="chat-card">
+
+    <div class="chat-header">
+
+      <div class="status"></div>
+
+      <div>
+        <strong>AURA Guru</strong>
+        <small>Personal guidance space</small>
+      </div>
+
+    </div>
+
+
+    <div class="messages" id="messages">
+
+      <div class="message guru-message">
+
+        Welcome to your personal space.<br><br>
+
+        Tell me what is happening in your life,
+        what you want to achieve, or what is keeping
+        you stuck.
+
+        <br><br>
+
+        Don't worry about explaining it perfectly.
+        Start wherever you are.
+
+      </div>
+
+    </div>
+
+
+    <div class="suggestions">
+
+      <button
+        class="suggestion"
+        onclick="useSuggestion('I feel confused about my next step.')">
+        I'm confused
+      </button>
+
+      <button
+        class="suggestion"
+        onclick="useSuggestion('Help me create a clear goal.')">
+        Set a goal
+      </button>
+
+      <button
+        class="suggestion"
+        onclick="useSuggestion('I am struggling with discipline.')">
+        Build discipline
+      </button>
+
+      <button
+        class="suggestion"
+        onclick="useSuggestion('Help me make an important decision.')">
+        Important decision
+      </button>
+
+    </div>
+
+
+    <div class="input-area">
+
+      <textarea
+        id="messageInput"
+        placeholder="Tell AURA what you're dealing with..."
+      ></textarea>
+
+      <button
+        id="sendButton"
+        class="send"
+        onclick="sendMessage()">
+        ↑
+      </button>
+
+    </div>
+
+  </section>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   SUPABASE
+   ===================================================== */
+
+const SUPABASE_URL =
+  "https://siatoghkuuummtrhfxlx.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_2gqa3zniT2SIzd8uaBs3Rw_1_1BvM-F";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+
+/* =====================================================
+   AUTH CHECK
+   ===================================================== */
+
+async function checkUser(){
+
+  const { data, error } =
+    await supabaseClient.auth.getUser();
+
+  if(
+    error ||
+    !data ||
+    !data.user
+  ){
+
+    window.location.href =
+      "login.html";
+
+  }
+
+}
+
+checkUser();
+
+
+/* =====================================================
+   SUGGESTION
+   ===================================================== */
+
+function useSuggestion(text){
+
+  const input =
+    document.getElementById("messageInput");
+
+  input.value = text;
+
+  input.focus();
+
+}
+
+
+/* =====================================================
+   ADD MESSAGE
+   ===================================================== */
+
+function addMessage(text,type){
+
+  const messages =
+    document.getElementById("messages");
+
+  const div =
+    document.createElement("div");
+
+  div.className =
+    "message " + type;
+
+  div.textContent =
+    text;
+
+  messages.appendChild(div);
+
+  messages.scrollTop =
+    messages.scrollHeight;
+
+}
+
+
+/* =====================================================
+   SEND MESSAGE
+   ===================================================== */
+
+async function sendMessage(){
+
+  const input =
+    document.getElementById("messageInput");
+
+  const button =
+    document.getElementById("sendButton");
+
+  const text =
+    input.value.trim();
+
+
+  if(!text){
+
+    return;
+
+  }
+
+
+  addMessage(
+    text,
+    "user-message"
+  );
+
+  input.value = "";
+
+  button.disabled = true;
+
+
+  /* DEMO RESPONSE */
+
+  setTimeout(function(){
+
+    addMessage(
+      "I hear you. Before we decide what to do next, let's understand the real problem. What outcome do you want, and what is the biggest thing stopping you right now?",
+      "guru-message"
+    );
+
+    button.disabled = false;
+
+  },700);
+
+}
+
+
+/* =====================================================
+   ENTER KEY
+   ===================================================== */
+
+document
+  .getElementById("messageInput")
+  .addEventListener(
+    "keydown",
+    function(event){
+
+      if(
+        event.key === "Enter" &&
+        !event.shiftKey
+      ){
+
+        event.preventDefault();
+
+        sendMessage();
+
+      }
+
+    }
+  );
+
+</script>
+
+</body>
+</html>
