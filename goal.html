@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>AURA Guru | Set Your Goal</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(212,175,55,0.12), transparent 35%),
+        linear-gradient(135deg, #050505, #0b0b0b 55%, #111008);
+      color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 25px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 650px;
+      padding: 40px;
+      border: 1px solid rgba(212,175,55,0.25);
+      border-radius: 24px;
+      background: rgba(15,15,15,0.92);
+      box-shadow: 0 25px 80px rgba(0,0,0,0.55);
+    }
+
+    .brand {
+      color: #d4af37;
+      letter-spacing: 4px;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: 34px;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #aaa;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      margin: 20px 0 8px;
+      font-size: 14px;
+      color: #ddd;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid #333;
+      background: #0b0b0b;
+      color: white;
+      font-size: 15px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #d4af37;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 28px;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #d4af37, #f0d477);
+      color: #080808;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .back {
+      margin-top: 18px;
+      text-align: center;
+      color: #999;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .message {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 14px;
+      min-height: 20px;
+    }
+
+    .success {
+      color: #65d68a;
+    }
+
+    .error {
+      color: #ff6b6b;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+
+    <div class="brand">AURA GURU AI</div>
+
+    <h1>Define Your Goal</h1>
+
+    <p class="subtitle">
+      A clear goal gives your journey direction.
+      Tell AURA Guru what you want to achieve and why it matters.
+    </p>
+
+    <form id="goalForm">
+
+      <label for="title">Goal Title</label>
+      <input
+        type="text"
+        id="title"
+        placeholder="Example: Build my first successful business"
+        required
+      >
+
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        placeholder="Describe what you want to achieve..."
+        required
+      ></textarea>
+
+      <label for="target_date">Target Date</label>
+      <input
+        type="date"
+        id="target_date"
+        required
+      >
+
+      <label for="why">Why does this goal matter to you?</label>
+      <textarea
+        id="why"
+        placeholder="Write the real reason behind this goal..."
+        required
+      ></textarea>
+
+      <button type="submit" id="saveButton">
+        Save My Goal
+      </button>
+
+    </form>
+
+    <div id="message" class="message"></div>
+
+    <div class="back" onclick="window.location.href='dashboard.html'">
+      ← Back to Dashboard
+    </div>
+
+  </div>
+
+  <script>
+
+    const SUPABASE_URL =
+      "https://siatoghkuuummtrhfxlx.supabase.co";
+
+    const SUPABASE_ANON_KEY =
+      "sb_publishable_2gqa3zniT2SIzd8uaBs3Rw_1_1BvM-F";
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
+
+
+    async function checkUser() {
+
+      const {
+        data: { user },
+        error
+      } = await supabaseClient.auth.getUser();
+
+      if (error || !user) {
+        window.location.href = "login.html";
+        return null;
+      }
+
+      return user;
+    }
+
+
+    document
+      .getElementById("goalForm")
+      .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const button =
+          document.getElementById("saveButton");
+
+        const message =
+          document.getElementById("message");
+
+        const user = await checkUser();
+
+        if (!user) return;
+
+        const title =
+          document.getElementById("title").value.trim();
+
+        const description =
+          document.getElementById("description").value.trim();
+
+        const target_date =
+          document.getElementById("target_date").value;
+
+        const why =
+          document.getElementById("why").value.trim();
+
+
+        button.disabled = true;
+        button.textContent = "Saving...";
+
+        message.textContent = "";
+        message.className = "message";
+
+
+        try {
+
+          const { error } =
+            await supabaseClient
+              .from("goals")
+              .insert([
+                {
+                  user_id: user.id,
+                  title: title,
+                  description: description,
+                  target_date: target_date,
+                  why: why
+                }
+              ]);
+
+
+          if (error) {
+            throw error;
+          }
+
+
+          message.textContent =
+            "Your goal has been saved successfully.";
+
+          message.className =
+            "message success";
+
+
+          setTimeout(() => {
+            window.location.href = "dashboard.html";
+          }, 1000);
+
+
+        } catch (error) {
+
+          console.error("GOAL SAVE ERROR:", error);
+
+          message.textContent =
+            error.message ||
+            "Unable to save your goal.";
+
+          message.className =
+            "message error";
+
+          button.disabled = false;
+          button.textContent = "Save My Goal";
+        }
+
+      });
+
+
+    checkUser();
+
+  </script>
+
+</body>
+</html>
