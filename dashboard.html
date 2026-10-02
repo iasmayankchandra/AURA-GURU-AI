@@ -1626,53 +1626,7 @@ async function completeAction(actionId) {
         : `${completed} of ${total} actions completed today.`;
   }
 }
-  async function loadTodayFocus() {
-
-  const {
-    data: { user },
-    error: userError
-  } = await supabaseClient.auth.getUser();
-
-  if (userError || !user) return;
-
-  const { data, error } = await supabaseClient
-    .from("goals")
-    .select("title, target_date")
-    .eq("user_id", user.id)
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-
-  if (error) {
-    console.error("FOCUS LOAD ERROR:", error);
-    return;
-  }
-
-  const focusTitle =
-    document.getElementById("todayFocusTitle");
-
-  const focusText =
-    document.getElementById("todayFocusText");
-
-  if (!focusTitle || !focusText) return;
-
-  if (!data) {
-
-    focusTitle.textContent =
-      "Set your goal first.";
-
-    focusText.textContent =
-      "Your daily focus will appear here once you create your goal.";
-
-    return;
-  }
-
-  focusTitle.textContent =
-    data.title;
-
-  focusText.textContent =
-    "Keep today's actions aligned with this goal.";
-}
+  
   async function loadStreak() {
 
   const {
