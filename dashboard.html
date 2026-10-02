@@ -1284,6 +1284,63 @@ async function completeAction(actionId) {
 
   loadActions();
 }
+  async function loadProgress() {
+
+  const {
+    data: { user },
+    error: userError
+  } = await supabaseClient.auth.getUser();
+
+  if (userError || !user) return;
+
+  const today = getLocalDate();
+
+  const { data, error } = await supabaseClient
+    .from("daily_actions")
+    .select("completed")
+    .eq("user_id", user.id)
+    .eq("action_date", today);
+
+  if (error) {
+    console.error("Error loading progress:", error);
+    return;
+  }
+
+  const total = data ? data.length : 0;
+
+  const completed = data
+    ? data.filter(action => action.completed).length
+    : 0;
+
+  const percent =
+    total === 0
+      ? 0
+      : Math.round((completed / total) * 100);
+
+  const number =
+    document.getElementById("progressNumber");
+
+  const fill =
+    document.getElementById("progressFill");
+
+  const text =
+    document.getElementById("progressText");
+
+  if (number) {
+    number.textContent = `${percent}%`;
+  }
+
+  if (fill) {
+    fill.style.width = `${percent}%`;
+  }
+
+  if (text) {
+    text.textContent =
+      total === 0
+        ? "No actions added for today."
+        : `${completed} of ${total} actions completed today.`;
+  }
+}
   loadUser();
   loadGoal();
 loadactions();
