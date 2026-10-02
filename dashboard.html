@@ -914,7 +914,100 @@ const supabaseClient =
 /* =========================================================
    LOAD CURRENT USER
    ========================================================= */
+async function loadActions() {
 
+  const {
+    data: { user },
+    error: userError
+  } = await supabaseClient.auth.getUser();
+
+  if (userError || !user) {
+    console.log("User not logged in");
+    return;
+  }
+
+  const today = getLocalDate();
+
+  const { data, error } = await supabaseClient
+    .from("daily_actions")
+    .select("*")
+    .eq("user_id", user.id)
+    .eq("action_date", today)
+    .order("id", { ascending: true });
+
+  if (error) {
+    console.error("Error loading actions:", error);
+    return;
+  }
+
+  const list = document.getElementById("actionsList");
+
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  if (!data || data.length === 0) {
+    list.innerHTML = `
+      <div class="action-item">
+        <span style="color:#aaa;">
+          No actions added for today.
+        </span>
+      </div>
+    `;
+    return;
+  }
+
+  data.forEach(action => {
+
+    const item = document.createElement("div");
+
+    item.className = "action-item";
+    item.style.marginBottom = "15px";
+
+    item.innerHTML = `
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:10px;
+      ">
+
+        <span style="
+          color:${action.completed ? "#777" : "#fff"};
+          text-decoration:${action.completed ? "line-through" : "none"};
+        ">
+          ${action.action}
+        </span>
+
+        ${
+          action.completed
+          ?
+          `<span style="color:#d4af37;font-weight:700;">
+            Completed ✓
+          </span>`
+          :
+          `<button
+            onclick="completeAction('${action.id}')"
+            style="
+              padding:8px 13px;
+              border:none;
+              border-radius:9px;
+              background:#d4af37;
+              color:#080808;
+              font-weight:700;
+              cursor:pointer;
+            "
+          >
+            Complete ✓
+          </button>`
+        }
+
+      </div>
+    `;
+
+    list.appendChild(item);
+  });
+}
 async function loadUser(){
 
   try{
