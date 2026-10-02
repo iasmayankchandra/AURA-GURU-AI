@@ -935,6 +935,141 @@ body::before{
   </div>
 
 </div>
+    <div class="section">
+
+  <div class="section-head">
+
+    <h2>
+      Daily Reflection
+    </h2>
+
+    <span>
+      REFLECT
+    </span>
+
+  </div>
+
+  <div style="display:grid;gap:16px;">
+
+    <div>
+      <label style="color:#aaa;font-size:14px;">
+        What did you accomplish today?
+      </label>
+
+      <textarea
+        id="reflectionAccomplishment"
+        placeholder="Write what you accomplished today..."
+        style="
+          width:100%;
+          min-height:90px;
+          margin-top:8px;
+          padding:14px;
+          border-radius:12px;
+          border:1px solid rgba(212,175,55,.35);
+          background:#0b0b0b;
+          color:#fff;
+          resize:vertical;
+          box-sizing:border-box;
+        "
+      ></textarea>
+    </div>
+
+    <div>
+      <label style="color:#aaa;font-size:14px;">
+        What was your biggest challenge?
+      </label>
+
+      <textarea
+        id="reflectionChallenge"
+        placeholder="What challenged you today?"
+        style="
+          width:100%;
+          min-height:90px;
+          margin-top:8px;
+          padding:14px;
+          border-radius:12px;
+          border:1px solid rgba(212,175,55,.35);
+          background:#0b0b0b;
+          color:#fff;
+          resize:vertical;
+          box-sizing:border-box;
+        "
+      ></textarea>
+    </div>
+
+    <div>
+      <label style="color:#aaa;font-size:14px;">
+        What did you learn today?
+      </label>
+
+      <textarea
+        id="reflectionLearning"
+        placeholder="Write one thing you learned..."
+        style="
+          width:100%;
+          min-height:90px;
+          margin-top:8px;
+          padding:14px;
+          border-radius:12px;
+          border:1px solid rgba(212,175,55,.35);
+          background:#0b0b0b;
+          color:#fff;
+          resize:vertical;
+          box-sizing:border-box;
+        "
+      ></textarea>
+    </div>
+
+    <div>
+      <label style="color:#aaa;font-size:14px;">
+        What will you focus on tomorrow?
+      </label>
+
+      <textarea
+        id="reflectionTomorrow"
+        placeholder="Choose your focus for tomorrow..."
+        style="
+          width:100%;
+          min-height:90px;
+          margin-top:8px;
+          padding:14px;
+          border-radius:12px;
+          border:1px solid rgba(212,175,55,.35);
+          background:#0b0b0b;
+          color:#fff;
+          resize:vertical;
+          box-sizing:border-box;
+        "
+      ></textarea>
+    </div>
+
+    <button
+      onclick="saveReflection()"
+      style="
+        padding:13px 20px;
+        border:none;
+        border-radius:11px;
+        background:#d4af37;
+        color:#080808;
+        font-weight:800;
+        cursor:pointer;
+      "
+    >
+      Save Today's Reflection
+    </button>
+
+    <div
+      id="reflectionStatus"
+      style="
+        text-align:center;
+        color:#d4af37;
+        font-weight:700;
+      "
+    ></div>
+
+  </div>
+
+</div>
   <!-- AI GURU -->
 
   <section class="ai">
