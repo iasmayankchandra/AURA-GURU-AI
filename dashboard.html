@@ -1008,8 +1008,50 @@ function openGuru(){
 /* =========================================================
    START
    ========================================================= */
+async function loadGoal(){
 
+  const {
+    data: { user },
+    error
+  } = await supabaseClient.auth.getUser();
+
+  if(error || !user){
+    return;
+  }
+
+  const { data, error: goalError } =
+    await supabaseClient
+      .from("goals")
+      .select("title, target_date")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+  const goalText =
+    document.getElementById("goalText");
+
+  if(goalError){
+    console.error("GOAL LOAD ERROR:", goalError);
+    goalText.textContent = "Unable to load your goal.";
+    return;
+  }
+
+  if(!data){
+    goalText.textContent = "No goal set yet.";
+    return;
+  }
+
+  let text = data.title;
+
+  if(data.target_date){
+    text += " • Target: " + data.target_date;
+  }
+
+  goalText.textContent = text;
+}
 loadUser();
+  loadGoal();
 
 </script>
 
