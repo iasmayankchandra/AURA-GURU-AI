@@ -665,20 +665,36 @@ body::before{
 
   <div class="card">
 
-    <div class="card-icon">
-      ⚡
-    </div>
-
-    <h3>
-      Today's Action
-    </h3>
-
-    <p>
-      Focus on one meaningful action
-      that moves you forward today.
-    </p>
-
+  <div class="card-icon">
+    ⚡
   </div>
+
+  <h3>
+    Today's Action
+  </h3>
+
+  <p id="todayAction">
+    Loading today's action...
+  </p>
+
+  <button
+    id="actionButton"
+    onclick="completeAction()"
+    style="
+      margin-top:15px;
+      padding:10px 18px;
+      border:none;
+      border-radius:10px;
+      background:#d4af37;
+      color:#080808;
+      font-weight:700;
+      cursor:pointer;
+    "
+  >
+    Mark Complete ✓
+  </button>
+
+</div>
 
 
   <!-- DIRECTION -->
