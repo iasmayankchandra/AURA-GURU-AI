@@ -1423,10 +1423,122 @@ async function completeAction(actionId) {
         : `${completed} of ${total} actions completed today.`;
   }
 }
+  async function loadStreak() {
+
+  const {
+    data: { user },
+    error: userError
+  } = await supabaseClient.auth.getUser();
+
+  if (userError || !user) return;
+
+  const { data: actions, error } = await supabaseClient
+    .from("daily_actions")
+    .select("action_date, completed")
+    .eq("user_id", user.id)
+    .eq("completed", true)
+    .order("action_date", { ascending: false });
+
+  if (error) {
+    console.error("STREAK LOAD ERROR:", error);
+    return;
+  }
+
+  if (!actions || actions.length === 0) {
+    document.getElementById("currentStreak").textContent = "0";
+    document.getElementById("bestStreak").textContent = "0";
+    return;
+  }
+
+  const completedDates = [
+    ...new Set(actions.map(action => action.action_date))
+  ];
+
+  let currentStreak = 0;
+  let bestStreak = 0;
+  let streak = 0;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const todayString = getLocalDate();
+
+  let checkDate = new Date(today);
+
+  if (!completedDates.includes(todayString)) {
+    checkDate.setDate(checkDate.getDate() - 1);
+  }
+
+  while (true) {
+
+    const dateString =
+      checkDate.getFullYear() +
+      "-" +
+      String(checkDate.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(checkDate.getDate()).padStart(2, "0");
+
+    if (completedDates.includes(dateString)) {
+      streak++;
+      checkDate.setDate(checkDate.getDate() - 1);
+    } else {
+      break;
+    }
+  }
+
+  currentStreak = streak;
+
+  streak = 0;
+
+  for (let i = 0; i < completedDates.length; i++) {
+
+    if (i === 0) {
+      streak = 1;
+    } else {
+
+      const previous = new Date(completedDates[i - 1]);
+      const current = new Date(completedDates[i]);
+
+      const difference =
+        (previous - current) / (1000 * 60 * 60 * 24);
+
+      if (difference === 1) {
+        streak++;
+      } else {
+        break;
+      }
+    }
+
+    if (streak > bestStreak) {
+      bestStreak = streak;
+    }
+  }
+
+  document.getElementById("currentStreak").textContent =
+    currentStreak;
+
+  document.getElementById("bestStreak").textContent =
+    bestStreak;
+
+  const message =
+    document.getElementById("streakMessage");
+
+  if (currentStreak === 0) {
+    message.textContent =
+      "Complete an action today to start your streak.";
+  } else if (currentStreak === 1) {
+    message.textContent =
+      "Great start. Come back tomorrow and keep it going.";
+  } else {
+    message.textContent =
+      `${currentStreak} days strong. Keep showing up.`;
+  }
+}
   loadUser();
   loadGoal();
   loadActions();
   loadProgress();
+  loadStreak();
 </script>
 
 </body>
