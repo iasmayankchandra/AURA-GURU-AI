@@ -1669,6 +1669,66 @@ async function completeAction(actionId) {
       `${currentStreak} days strong. Keep showing up.`;
   }
 }
+  async function saveReflection() {
+
+  const accomplishment =
+    document.getElementById("reflectionAccomplishment").value.trim();
+
+  const challenge =
+    document.getElementById("reflectionChallenge").value.trim();
+
+  const learning =
+    document.getElementById("reflectionLearning").value.trim();
+
+  const tomorrowFocus =
+    document.getElementById("reflectionTomorrow").value.trim();
+
+  if (
+    !accomplishment &&
+    !challenge &&
+    !learning &&
+    !tomorrowFocus
+  ) {
+    alert("Please write something before saving.");
+    return;
+  }
+
+  const {
+    data: { user },
+    error: userError
+  } = await supabaseClient.auth.getUser();
+
+  if (userError || !user) {
+    alert("Please login first.");
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("daily_reflections")
+    .upsert(
+      [{
+        user_id: user.id,
+        reflection_date: getLocalDate(),
+        accomplishment: accomplishment,
+        challenge: challenge,
+        learning: learning,
+        tomorrow_focus: tomorrowFocus
+      }],
+      {
+        onConflict: "user_id,reflection_date"
+      }
+    );
+
+  if (error) {
+    console.error("REFLECTION SAVE ERROR:", error);
+    alert("Could not save reflection.");
+    return;
+  }
+
+  document.getElementById("reflectionStatus").textContent =
+    "Reflection saved successfully ✓";
+
+}
   loadUser();
   loadGoal();
   loadActions();
