@@ -1734,6 +1734,71 @@ async function completeAction(actionId) {
     "Reflection saved successfully ✓";
 
 }
+  <!-- GURU GUIDANCE -->
+
+<div class="section">
+  <div class="section-head">
+    <h2>Guru Guidance</h2>
+    <span>YOUR NEXT STEP</span>
+  </div>
+
+  <div style="
+    background:linear-gradient(
+      145deg,
+      rgba(212,175,55,0.10),
+      rgba(255,255,255,0.03)
+    );
+    border:1px solid rgba(212,175,55,0.25);
+    border-radius:18px;
+    padding:24px;
+  ">
+
+    <div style="
+      color:#d4af37;
+      font-size:14px;
+      font-weight:700;
+      letter-spacing:1px;
+      margin-bottom:10px;
+    ">
+      AURA GURU
+    </div>
+
+    <h3 style="
+      color:#fff;
+      margin:0 0 10px;
+      font-size:22px;
+    ">
+      Need direction?
+    </h3>
+
+    <p style="
+      color:#aaa;
+      line-height:1.6;
+      margin-bottom:20px;
+    ">
+      Talk to your Guru and get practical guidance for your next step.
+    </p>
+
+    <button
+      onclick="openGuru()"
+      style="
+        padding:13px 22px;
+        border:none;
+        border-radius:11px;
+        background:#d4af37;
+        color:#080808;
+        font-weight:800;
+        cursor:pointer;
+      "
+    >
+      Ask Your Guru →
+    </button>
+
+  </div>
+</div>
+  function openGuru() {
+  window.location.href = "guru.html";
+}
   loadUser();
   loadGoal();
   loadActions();
