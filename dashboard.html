@@ -1035,7 +1035,29 @@ function openGoal(){
   window.location.href = "goal-details.html";
 
 }
+function completeAction() {
 
+  const action =
+    document.getElementById("todayAction");
+
+  const button =
+    document.getElementById("actionButton");
+
+  action.textContent =
+    "Today's action completed. Keep moving forward.";
+
+  button.textContent =
+    "Completed ✓";
+
+  button.style.background =
+    "#1f8f55";
+
+  button.style.color =
+    "#ffffff";
+
+  button.disabled = true;
+
+}
 /* =========================================================
    START
    ========================================================= */
