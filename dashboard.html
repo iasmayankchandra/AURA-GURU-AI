@@ -1720,10 +1720,15 @@ async function completeAction(actionId) {
     );
 
   if (error) {
-    console.error("REFLECTION SAVE ERROR:", error);
-    alert("Could not save reflection.");
-    return;
-  }
+  console.error("REFLECTION SAVE ERROR:", error);
+  alert(
+    "Reflection Error:\n" +
+    error.message +
+    "\n\nCode: " +
+    error.code
+  );
+  return;
+}
 
   document.getElementById("reflectionStatus").textContent =
     "Reflection saved successfully ✓";
