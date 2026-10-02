@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>My Goal — AURA GURU</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(212,175,55,0.10), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(212,175,55,0.06), transparent 35%),
+        #050505;
+      color: #fff;
+      padding: 30px 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 45px;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 3px;
+    }
+
+    .logo span {
+      color: #d4af37;
+    }
+
+    .back {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .back:hover {
+      color: #d4af37;
+    }
+
+    .hero {
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      color: #d4af37;
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 42px;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      color: #999;
+      line-height: 1.7;
+      max-width: 650px;
+    }
+
+    .goal-card {
+      margin-top: 30px;
+      padding: 36px;
+      border-radius: 24px;
+      background: rgba(18,18,18,0.95);
+      border: 1px solid rgba(212,175,55,0.22);
+      box-shadow:
+        0 25px 70px rgba(0,0,0,0.55),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+
+    .label {
+      color: #888;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .value {
+      color: #fff;
+      font-size: 21px;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .goal-title {
+      font-size: 34px;
+      font-weight: 700;
+      color: #d4af37;
+      line-height: 1.3;
+      margin-bottom: 30px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .section {
+      padding: 24px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .empty {
+      text-align: center;
+      padding: 55px 25px;
+      color: #999;
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 18px;
+    }
+
+    .empty h2 {
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .button {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 14px 24px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #d4af37, #f0d77a);
+      color: #080808;
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .loading {
+      text-align: center;
+      color: #999;
+      padding: 60px 20px;
+    }
+
+    .error {
+      text-align: center;
+      color: #ff9c9c;
+      padding: 40px 20px;
+    }
+
+    @media (max-width: 650px) {
+
+      body {
+        padding: 22px 15px;
+      }
+
+      .topbar {
+        margin-bottom: 35px;
+      }
+
+      h1 {
+        font-size: 32px;
+      }
+
+      .goal-card {
+        padding: 25px 20px;
+      }
+
+      .goal-title {
+        font-size: 27px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="topbar">
+
+      <div class="logo">
+        AURA <span>GURU</span>
+      </div>
+
+      <a href="dashboard.html" class="back">
+        ← Dashboard
+      </a>
+
+    </div>
+
+
+    <div class="hero">
+
+      <div class="eyebrow">
+        Your Direction
+      </div>
+
+      <h1>
+        My Goal
+      </h1>
+
+      <p class="subtitle">
+        Your goal gives AURA GURU the direction it needs
+        to guide you toward your next level.
+      </p>
+
+    </div>
+
+
+    <div id="content">
+
+      <div class="loading">
+        Loading your goal...
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    const SUPABASE_URL =
+      "https://siatoghkuuummtrhfxlx.supabase.co";
+
+    const SUPABASE_ANON_KEY =
+      "PASTE_YOUR_EXISTING_SUPABASE_PUBLISHABLE_KEY_HERE";
+
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
+
+
+    async function loadGoal() {
+
+      const content =
+        document.getElementById("content");
+
+
+      try {
+
+        const {
+          data: {
+            user
+          }
+        } =
+          await supabaseClient.auth.getUser();
+
+
+        if (!user) {
+
+          window.location.href =
+            "login.html";
+
+          return;
+
+        }
+
+
+        const {
+          data,
+          error
+        } =
+          await supabaseClient
+            .from("goals")
+            .select("*")
+            .eq("user_id", user.id)
+            .order("created_at", {
+              ascending: false
+            })
+            .limit(1)
+            .maybeSingle();
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        if (!data) {
+
+          content.innerHTML = `
+
+            <div class="goal-card empty">
+
+              <div class="empty-icon">
+                🎯
+              </div>
+
+              <h2>
+                No goal saved yet
+              </h2>
+
+              <p>
+                Define your first goal and let
+                AURA GURU guide you forward.
+              </p>
+
+              <a
+                href="goal.html"
+                class="button"
+              >
+                Define My Goal →
+              </a>
+
+            </div>
+
+          `;
+
+          return;
+
+        }
+
+
+        const targetDate =
+          data.target_date
+            ? new Date(
+                data.target_date + "T00:00:00"
+              ).toLocaleDateString(
+                "en-IN",
+                {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric"
+                }
+              )
+            : "No target date set";
+
+
+        content.innerHTML = `
+
+          <div class="goal-card">
+
+            <div class="label">
+              Your Main Goal
+            </div>
+
+            <div class="goal-title">
+              ${escapeHtml(data.title || "Untitled Goal")}
+            </div>
+
+
+            <div class="grid">
+
+
+              <div class="section">
+
+                <div class="label">
+                  Description
+                </div>
+
+                <div class="value">
+                  ${escapeHtml(
+                    data.description ||
+                    "No description added."
+                  )}
+                </div>
+
+              </div>
+
+
+              <div class="section">
+
+                <div class="label">
+                  Target Date
+                </div>
+
+                <div class="value">
+                  ${targetDate}
+                </div>
+
+              </div>
+
+
+              <div class="section">
+
+                <div class="label">
+                  Why This Matters
+                </div>
+
+                <div class="value">
+                  ${escapeHtml(
+                    data.why ||
+                    "You haven't added your reason yet."
+                  )}
+                </div>
+
+              </div>
+
+
+              <div class="section">
+
+                <div class="label">
+                  Created
+                </div>
+
+                <div class="value">
+                  ${new Date(
+                    data.created_at
+                  ).toLocaleDateString(
+                    "en-IN",
+                    {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric"
+                    }
+                  )}
+                </div>
+
+              </div>
+
+
+            </div>
+
+          </div>
+
+        `;
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        content.innerHTML = `
+
+          <div class="goal-card error">
+
+            Unable to load your goal.
+
+            <br><br>
+
+            Please refresh the page and try again.
+
+          </div>
+
+        `;
+
+      }
+
+    }
+
+
+    function escapeHtml(value) {
+
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+
+    loadGoal();
+
+  </script>
+
+</body>
+</html>
