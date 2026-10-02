@@ -697,7 +697,16 @@ body::before{
       font-size:24px;
       margin:0 0 10px;
     ">
-      One day. One direction.
+      <h3
+  id="todayFocusTitle"
+  style="
+    color:#fff;
+    font-size:24px;
+    margin:0 0 10px;
+  "
+>
+  Loading your focus...
+</h3>
     </h3>
 
     <p style="
@@ -705,8 +714,16 @@ body::before{
       line-height:1.7;
       margin:0;
     ">
-      Focus on completing your actions today.
-      Consistency is what moves your goal forward.
+      <p
+  id="todayFocusText"
+  style="
+    color:#999;
+    line-height:1.7;
+    margin:0;
+  "
+>
+  Loading your daily direction...
+</p>
     </p>
 
   </div>
@@ -1608,6 +1625,53 @@ async function completeAction(actionId) {
         ? "No actions added for today."
         : `${completed} of ${total} actions completed today.`;
   }
+}
+  async function loadTodayFocus() {
+
+  const {
+    data: { user },
+    error: userError
+  } = await supabaseClient.auth.getUser();
+
+  if (userError || !user) return;
+
+  const { data, error } = await supabaseClient
+    .from("goals")
+    .select("title, target_date")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    console.error("FOCUS LOAD ERROR:", error);
+    return;
+  }
+
+  const focusTitle =
+    document.getElementById("todayFocusTitle");
+
+  const focusText =
+    document.getElementById("todayFocusText");
+
+  if (!focusTitle || !focusText) return;
+
+  if (!data) {
+
+    focusTitle.textContent =
+      "Set your goal first.";
+
+    focusText.textContent =
+      "Your daily focus will appear here once you create your goal.";
+
+    return;
+  }
+
+  focusTitle.textContent =
+    data.title;
+
+  focusText.textContent =
+    "Keep today's actions aligned with this goal.";
 }
   async function loadStreak() {
 
