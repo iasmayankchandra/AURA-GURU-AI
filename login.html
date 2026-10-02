@@ -179,350 +179,544 @@
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <div class="brand">
-      <h1>AURA</h1>
-      <p>Your Personal AI Guru</p>
-    </div>
-
-    <div class="card">
-
-      <div class="tabs">
-        <button id="loginTab" class="tab active" onclick="showLogin()">
-          LOGIN
-        </button>
-
-        <button id="signupTab" class="tab" onclick="showSignup()">
-          CREATE ACCOUNT
-        </button>
-      </div>
-
-      <!-- LOGIN -->
-      <div id="loginForm">
-
-        <h2>Welcome Back</h2>
-        <p class="sub">
-          Continue your journey with AURA GURU.
-        </p>
-
-        <div class="field">
-          <label>Email</label>
-          <input id="loginEmail" type="email" placeholder="Enter your email">
-        </div>
-
-        <div class="field">
-          <label>Password</label>
-          <input id="loginPassword" type="password" placeholder="Enter your password">
-        </div>
-
-        <button id="loginButton" class="main-btn" onclick="loginUser()">
-          LOGIN TO AURA
-        </button>
-
-      </div>
-
-      <!-- SIGNUP -->
-      <div id="signupForm" class="hidden">
-
-        <h2>Create Your AURA</h2>
-        <p class="sub">
-          Start building your personal AI-guided growth journey.
-        </p>
-
-        <div class="field">
-          <label>Full Name</label>
-          <input id="signupName" type="text" placeholder="Your name">
-        </div>
-
-        <div class="field">
-          <label>Email</label>
-          <input id="signupEmail" type="email" placeholder="Your email">
-        </div>
-
-        <div class="field">
-          <label>Password</label>
-          <input id="signupPassword" type="password" placeholder="Minimum 6 characters">
-        </div>
-
-        <button id="signupButton" class="main-btn" onclick="createAccount()">
-          CREATE MY AURA
-        </button>
-
-      </div>
-
-      <div id="message" class="message"></div>
-
-      <a href="index.html" class="back">
-        ← Back to AURA GURU
-      </a>
-
-    </div>
+  <div class="brand">
+    <h1>AURA</h1>
+    <p>Your Personal AI Guru</p>
   </div>
 
+  <div class="card">
 
-  <script>
+    <div class="tabs">
+      <button id="loginTab" class="tab active" onclick="showLogin()">
+        LOGIN
+      </button>
 
-    /* =====================================================
-       SUPABASE CONFIGURATION
-       ===================================================== */
+      <button id="signupTab" class="tab" onclick="showSignup()">
+        CREATE ACCOUNT
+      </button>
+    </div>
 
-    const SUPABASE_URL = "https://siatoghkuuummtrhfxlx.supabase.co";
+    <!-- LOGIN -->
 
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_2gqa3zniT2SIzd8uaBs3Rw_1_1BvM-F";
+    <div id="loginForm">
+
+      <h2>Welcome Back</h2>
+
+      <p class="sub">
+        Continue your journey with AURA GURU.
+      </p>
+
+      <div class="field">
+
+        <label>Email</label>
+
+        <input
+          id="loginEmail"
+          type="email"
+          autocomplete="email"
+          placeholder="Enter your email"
+        >
+
+      </div>
+
+      <div class="field">
+
+        <label>Password</label>
+
+        <input
+          id="loginPassword"
+          type="password"
+          autocomplete="current-password"
+          placeholder="Enter your password"
+        >
+
+      </div>
+
+      <button
+        id="loginButton"
+        class="main-btn"
+        onclick="loginUser()"
+      >
+        LOGIN TO AURA
+      </button>
+
+    </div>
 
 
-    /* =====================================================
-       SUPABASE CLIENT
-       ===================================================== */
+    <!-- SIGNUP -->
 
-    const supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY
+    <div id="signupForm" class="hidden">
+
+      <h2>Create Your AURA</h2>
+
+      <p class="sub">
+        Start building your personal AI-guided growth journey.
+      </p>
+
+      <div class="field">
+
+        <label>Full Name</label>
+
+        <input
+          id="signupName"
+          type="text"
+          autocomplete="name"
+          placeholder="Your name"
+        >
+
+      </div>
+
+      <div class="field">
+
+        <label>Email</label>
+
+        <input
+          id="signupEmail"
+          type="email"
+          autocomplete="email"
+          placeholder="Your email"
+        >
+
+      </div>
+
+      <div class="field">
+
+        <label>Password</label>
+
+        <input
+          id="signupPassword"
+          type="password"
+          autocomplete="new-password"
+          placeholder="Minimum 6 characters"
+        >
+
+      </div>
+
+      <button
+        id="signupButton"
+        class="main-btn"
+        onclick="createAccount()"
+      >
+        CREATE MY AURA
+      </button>
+
+    </div>
+
+
+    <div id="message" class="message"></div>
+
+    <a href="index.html" class="back">
+      ← Back to AURA GURU
+    </a>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   SUPABASE
+   ===================================================== */
+
+const SUPABASE_URL =
+  "https://siatoghkuuummtrhfxlx.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_2gqa3zniT2SIzd8uaBs3Rw_1_1BvM-F";
+
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+
+/* =====================================================
+   MESSAGE
+   ===================================================== */
+
+function showMessage(text, type) {
+
+  const box = document.getElementById("message");
+
+  box.textContent = text;
+
+  box.className = "message " + type;
+}
+
+
+/* =====================================================
+   LOGIN TAB
+   ===================================================== */
+
+function showLogin() {
+
+  document
+    .getElementById("loginForm")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("signupForm")
+    .classList.add("hidden");
+
+  document
+    .getElementById("loginTab")
+    .classList.add("active");
+
+  document
+    .getElementById("signupTab")
+    .classList.remove("active");
+
+  document
+    .getElementById("message")
+    .className = "message";
+}
+
+
+/* =====================================================
+   SIGNUP TAB
+   ===================================================== */
+
+function showSignup() {
+
+  document
+    .getElementById("loginForm")
+    .classList.add("hidden");
+
+  document
+    .getElementById("signupForm")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("loginTab")
+    .classList.remove("active");
+
+  document
+    .getElementById("signupTab")
+    .classList.add("active");
+
+  document
+    .getElementById("message")
+    .className = "message";
+}
+
+
+/* =====================================================
+   CREATE ACCOUNT
+   ===================================================== */
+
+async function createAccount() {
+
+  const name =
+    document.getElementById("signupName")
+      .value.trim();
+
+  const email =
+    document.getElementById("signupEmail")
+      .value.trim()
+      .toLowerCase();
+
+  const password =
+    document.getElementById("signupPassword")
+      .value;
+
+  const button =
+    document.getElementById("signupButton");
+
+
+  if (!name) {
+
+    showMessage(
+      "Please enter your full name.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if (!email) {
+
+    showMessage(
+      "Please enter your email address.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if (!email.includes("@")) {
+
+    showMessage(
+      "Please enter a valid email address.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if (!password) {
+
+    showMessage(
+      "Please enter a password.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if (password.length < 6) {
+
+    showMessage(
+      "Password must contain at least 6 characters.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  button.disabled = true;
+  button.textContent = "CREATING...";
+
+
+  try {
+
+    const { data, error } =
+      await supabaseClient.auth.signUp({
+
+        email: email,
+
+        password: password,
+
+        options: {
+          data: {
+            full_name: name
+          }
+        }
+
+      });
+
+
+    if (error) {
+
+      console.error("SIGNUP ERROR:", error);
+
+      showMessage(
+        error.message,
+        "error"
+      );
+
+      return;
+    }
+
+
+    if (data.user) {
+
+      showMessage(
+        "Account created successfully. Please check your email and verify your account before logging in.",
+        "success"
+      );
+
+    }
+
+  } catch (err) {
+
+    console.error("SIGNUP EXCEPTION:", err);
+
+    showMessage(
+      err.message || "Something went wrong. Please try again.",
+      "error"
+    );
+
+  } finally {
+
+    button.disabled = false;
+
+    button.textContent = "CREATE MY AURA";
+
+  }
+
+}
+
+
+/* =====================================================
+   LOGIN
+   ===================================================== */
+
+async function loginUser() {
+
+  const email =
+    document.getElementById("loginEmail")
+      .value.trim()
+      .toLowerCase();
+
+  const password =
+    document.getElementById("loginPassword")
+      .value;
+
+  const button =
+    document.getElementById("loginButton");
+
+
+  /* EMAIL CHECK */
+
+  if (!email) {
+
+    showMessage(
+      "Please enter your email address.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if (!email.includes("@")) {
+
+    showMessage(
+      "Please enter a valid email address.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  /* PASSWORD CHECK */
+
+  if (!password) {
+
+    showMessage(
+      "Please enter your password.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  button.disabled = true;
+
+  button.textContent = "LOGGING IN...";
+
+
+  try {
+
+    const { data, error } =
+      await supabaseClient.auth.signInWithPassword({
+
+        email: email,
+
+        password: password
+
+      });
+
+
+    console.log("LOGIN RESPONSE:", data);
+    console.log("LOGIN ERROR:", error);
+
+
+    if (error) {
+
+      showMessage(
+        error.message,
+        "error"
+      );
+
+      return;
+    }
+
+
+    if (data && data.session) {
+
+      showMessage(
+        "Login successful! Opening your AURA dashboard...",
+        "success"
+      );
+
+
+      /*
+       * TEMPORARY DELAY
+       * Then open dashboard.
+       */
+
+      setTimeout(function() {
+
+        window.location.href = "dashboard.html";
+
+      }, 1000);
+
+      return;
+
+    }
+
+
+    showMessage(
+      "Login completed, but no active session was returned.",
+      "error"
     );
 
 
-    /* =====================================================
-       MESSAGE
-       ===================================================== */
+  } catch (err) {
 
-    function showMessage(text, type) {
+    console.error("LOGIN EXCEPTION:", err);
 
-      const box = document.getElementById("message");
+    showMessage(
+      err.message || "Something went wrong. Please try again.",
+      "error"
+    );
 
-      box.textContent = text;
+  } finally {
 
-      box.className = "message " + type;
+    button.disabled = false;
+
+    button.textContent = "LOGIN TO AURA";
+
+  }
+
+}
+
+
+/* =====================================================
+   ENTER KEY SUPPORT
+   ===================================================== */
+
+document
+  .getElementById("loginPassword")
+  .addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+
+      loginUser();
+
     }
 
+  });
 
-    /* =====================================================
-       TABS
-       ===================================================== */
 
-    function showLogin() {
+document
+  .getElementById("signupPassword")
+  .addEventListener("keydown", function(event) {
 
-      document.getElementById("loginForm").classList.remove("hidden");
+    if (event.key === "Enter") {
 
-      document.getElementById("signupForm").classList.add("hidden");
+      createAccount();
 
-      document.getElementById("loginTab").classList.add("active");
-
-      document.getElementById("signupTab").classList.remove("active");
-
-      document.getElementById("message").className = "message";
     }
 
+  });
 
-    function showSignup() {
 
-      document.getElementById("loginForm").classList.add("hidden");
-
-      document.getElementById("signupForm").classList.remove("hidden");
-
-      document.getElementById("loginTab").classList.remove("active");
-
-      document.getElementById("signupTab").classList.add("active");
-
-      document.getElementById("message").className = "message";
-    }
-
-
-    /* =====================================================
-       CREATE ACCOUNT
-       ===================================================== */
-
-    async function createAccount() {
-
-      const name =
-        document.getElementById("signupName").value.trim();
-
-      const email =
-        document.getElementById("signupEmail").value.trim();
-
-      const password =
-        document.getElementById("signupPassword").value;
-
-      const button =
-        document.getElementById("signupButton");
-
-
-      if (!name || !email || !password) {
-
-        showMessage(
-          "Please fill all the fields.",
-          "error"
-        );
-
-        return;
-      }
-
-
-      if (password.length < 6) {
-
-        showMessage(
-          "Password must contain at least 6 characters.",
-          "error"
-        );
-
-        return;
-      }
-
-
-      button.disabled = true;
-
-      button.textContent = "CREATING...";
-
-
-      try {
-
-        const { data, error } =
-          await supabaseClient.auth.signUp({
-
-            email: email,
-
-            password: password,
-
-            options: {
-              data: {
-                full_name: name
-              }
-            }
-
-          });
-
-
-        if (error) {
-
-          showMessage(
-            error.message,
-            "error"
-          );
-
-          button.disabled = false;
-
-          button.textContent = "CREATE MY AURA";
-
-          return;
-        }
-
-
-        if (data.user) {
-
-          showMessage(
-            "Account created successfully! Check your email to verify your account.",
-            "success"
-          );
-
-        }
-
-      } catch (err) {
-
-        showMessage(
-          "Something went wrong. Please try again.",
-          "error"
-        );
-
-      }
-
-
-      button.disabled = false;
-
-      button.textContent = "CREATE MY AURA";
-    }
-
-
-    /* =====================================================
-       LOGIN
-       ===================================================== */
-
-    async function loginUser() {
-
-      const email =
-        document.getElementById("loginEmail").value.trim();
-
-      const password =
-        document.getElementById("loginPassword").value;
-
-      const button =
-        document.getElementById("loginButton");
-
-
-      if (!email || !password) {
-
-        showMessage(
-          "Please enter email and password.",
-          "error"
-        );
-
-        return;
-      }
-
-
-      button.disabled = true;
-
-      button.textContent = "LOGGING IN...";
-
-
-      try {
-
-        const { data, error } =
-          await supabaseClient.auth.signInWithPassword({
-
-            email: email,
-
-            password: password
-
-          });
-
-
-        if (error) {
-
-          showMessage(
-            error.message,
-            "error"
-          );
-
-          button.disabled = false;
-
-          button.textContent = "LOGIN TO AURA";
-
-          return;
-        }
-
-
-        if (data.session) {
-
-          showMessage(
-            "Login successful! Dashboard connection is next.",
-            "success"
-          );
-
-          /*
-            NEXT STEP:
-            We will redirect this to dashboard.html
-            after the dashboard is ready.
-          */
-
-        }
-
-      } catch (err) {
-
-        showMessage(
-          "Something went wrong. Please try again.",
-          "error"
-        );
-
-      }
-
-
-      button.disabled = false;
-
-      button.textContent = "LOGIN TO AURA";
-    }
-
-  </script>
+</script>
 
 </body>
 </html>
