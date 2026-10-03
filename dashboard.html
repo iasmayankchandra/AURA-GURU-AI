@@ -1766,7 +1766,218 @@ async function completeAction(actionId) {
     "Reflection saved successfully ✓";
 
 }
+  async function loadReflectionHistory() {
 
+  const {
+    data: { user },
+    error: userError
+  } = await supabaseClient.auth.getUser();
+
+  if (userError || !user) {
+    return;
+  }
+
+  const historyBox = document.getElementById("reflectionHistory");
+
+  if (!historyBox) {
+    return;
+  }
+
+  const { data, error } = await supabaseClient
+    .from("daily_reflections")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("reflection_date", { ascending: false });
+
+  if (error) {
+    console.error("REFLECTION HISTORY ERROR:", error);
+
+    historyBox.innerHTML = `
+      <div style="color:#777;font-size:13px;">
+        Unable to load reflection history.
+      </div>
+    `;
+
+    return;
+  }
+
+  if (!data || data.length === 0) {
+
+    historyBox.innerHTML = `
+      <div style="
+        padding:20px;
+        border:1px solid rgba(255,255,255,.06);
+        border-radius:14px;
+        color:#666;
+        font-size:13px;
+        text-align:center;
+      ">
+        No previous reflections yet.
+      </div>
+    `;
+
+    return;
+  }
+
+  historyBox.innerHTML = "";
+
+  data.forEach((reflection, index) => {
+
+    const item = document.createElement("div");
+
+    item.style.cssText = `
+      margin-bottom:12px;
+      border:1px solid rgba(212,175,55,.15);
+      border-radius:14px;
+      background:#0b0b0b;
+      overflow:hidden;
+    `;
+
+    item.innerHTML = `
+
+      <button
+        onclick="toggleReflection(${index})"
+        style="
+          width:100%;
+          padding:16px;
+          border:none;
+          background:transparent;
+          color:#fff;
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          cursor:pointer;
+          text-align:left;
+        "
+      >
+
+        <span style="
+          color:#d4af37;
+          font-weight:700;
+        ">
+          ${reflection.reflection_date}
+        </span>
+
+        <span style="color:#777;">
+          View reflection ↓
+        </span>
+
+      </button>
+
+      <div
+        id="reflection-${index}"
+        style="
+          display:none;
+          padding:0 16px 18px;
+        "
+      >
+
+        <div style="margin-top:12px;">
+          <div style="color:#d4af37;font-size:12px;font-weight:700;">
+            ACCOMPLISHED
+          </div>
+
+          <div style="
+            color:#aaa;
+            margin-top:6px;
+            line-height:1.6;
+            font-size:13px;
+          ">
+            ${escapeReflectionText(reflection.accomplishment)}
+          </div>
+        </div>
+
+        <div style="margin-top:16px;">
+          <div style="color:#d4af37;font-size:12px;font-weight:700;">
+            BIGGEST CHALLENGE
+          </div>
+
+          <div style="
+            color:#aaa;
+            margin-top:6px;
+            line-height:1.6;
+            font-size:13px;
+          ">
+            ${escapeReflectionText(reflection.challenge)}
+          </div>
+        </div>
+
+        <div style="margin-top:16px;">
+          <div style="color:#d4af37;font-size:12px;font-weight:700;">
+            WHAT I LEARNED
+          </div>
+
+          <div style="
+            color:#aaa;
+            margin-top:6px;
+            line-height:1.6;
+            font-size:13px;
+          ">
+            ${escapeReflectionText(reflection.learning)}
+          </div>
+        </div>
+
+        <div style="margin-top:16px;">
+          <div style="color:#d4af37;font-size:12px;font-weight:700;">
+            TOMORROW'S FOCUS
+          </div>
+
+          <div style="
+            color:#aaa;
+            margin-top:6px;
+            line-height:1.6;
+            font-size:13px;
+          ">
+            ${escapeReflectionText(reflection.tomorrow_focus)}
+          </div>
+        </div>
+
+      </div>
+    `;
+
+    historyBox.appendChild(item);
+
+  });
+}
+
+
+function toggleReflection(index) {
+
+  const box =
+    document.getElementById("reflection-" + index);
+
+  if (!box) return;
+
+  if (box.style.display === "none") {
+    box.style.display = "block";
+  } else {
+    box.style.display = "none";
+  }
+
+}
+
+
+function escapeReflectionText(text) {
+
+  if (!text) {
+    return "—";
+  }
+
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;")
+    .replace(/\n/g, "<br>");
+}
+function toggleReflection(index) {
+   ...
+}
+
+function escapeReflectionText(text) {
+   ...
+}
   function openGuru() {
   window.location.href = "guru.html";
 }
@@ -1775,6 +1986,7 @@ async function completeAction(actionId) {
   loadActions();
   loadProgress();
   loadStreak();
+  loadReflectionHistory();
 </script>
 
 </body>
